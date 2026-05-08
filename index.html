@@ -899,23 +899,6 @@
     }
     .footer-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; align-items: end; }
     .footer-links { display: flex; flex-wrap: wrap; gap: 14px; justify-content: flex-end; color: #b9b9d5; }
-    .social-icons { display: flex; justify-content: flex-end; gap: 10px; margin-top: 14px; }
-    .social-icon {
-      width: 44px;
-      height: 44px;
-      display: grid;
-      place-items: center;
-      border-radius: var(--radius);
-      border: 1px solid rgba(79,110,247,.34);
-      background: rgba(79,110,247,.08);
-      color: white;
-      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
-    }
-    .social-icon:hover {
-      transform: translateY(-2px);
-      border-color: rgba(79,110,247,.82);
-      box-shadow: 0 0 26px rgba(79,110,247,.22);
-    }
     .small-print { color: var(--muted); margin-top: 10px; }
 
     .reveal { opacity: 0; transform: translateY(22px); transition: opacity .65s ease, transform .65s ease; }
@@ -930,7 +913,7 @@
       .roadmap-wrap::before { display: none; }
       section { padding: 72px 0; }
       .footer-grid { grid-template-columns: 1fr; }
-      .footer-links, .social-icons { justify-content: flex-start; }
+      .footer-links { justify-content: flex-start; }
     }
     @media (max-width: 620px) {
       .container { width: min(100% - 28px, 1160px); }
@@ -1385,10 +1368,6 @@ Total: 12s compute + 3s dispatch = &lt;15s per cycle</pre>
           <a href="#" aria-label="Demo Video placeholder">Demo Video</a>
           <a href="#" aria-label="Technical Docs placeholder">Technical Docs</a>
           <a href="https://www.linkedin.com/in/MukulPrasad1" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        </div>
-        <div class="social-icons" aria-label="Social profile links">
-          <a class="social-icon" href="https://github.com/MUKUL-PRASAD-SIGH/ContextOS" target="_blank" rel="noopener noreferrer" aria-label="ContextOS GitHub repository"><i data-lucide="github"></i></a>
-          <a class="social-icon" href="https://www.linkedin.com/in/MukulPrasad1" target="_blank" rel="noopener noreferrer" aria-label="Mukul Prasad LinkedIn profile"><i data-lucide="linkedin"></i></a>
         </div>
       </div>
     </div>
