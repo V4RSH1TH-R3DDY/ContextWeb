@@ -404,6 +404,207 @@
       border-top: 1px solid rgba(42,42,58,.66);
       color: #c4c4dd;
     }
+
+    .capability-grid {
+      display: grid;
+      grid-template-columns: 1.08fr .92fr 1fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .capability-card {
+      position: relative;
+      overflow: hidden;
+      padding: 0;
+      border: 1px solid rgba(42, 42, 58, .9);
+      background:
+        radial-gradient(circle at 12% 0%, rgba(79,110,247,.2), transparent 16rem),
+        linear-gradient(180deg, rgba(22, 22, 31, .94), rgba(10, 10, 15, .9));
+      border-radius: var(--radius);
+      box-shadow: 0 20px 70px rgba(0,0,0,.32);
+    }
+
+    .capability-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.055) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px);
+      background-size: 34px 34px;
+      opacity: .26;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,.82), transparent 78%);
+    }
+
+    .capability-card::after {
+      content: "";
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      top: 0;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--primary), var(--gold));
+      box-shadow: 0 0 26px rgba(79,110,247,.45);
+    }
+
+    .capability-head {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 14px;
+      align-items: center;
+      padding: 22px 22px 16px;
+      border-bottom: 1px solid rgba(42,42,58,.72);
+    }
+
+    .capability-icon {
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius);
+      font-size: 1.45rem;
+      background: rgba(79,110,247,.12);
+      border: 1px solid rgba(79,110,247,.34);
+      box-shadow: 0 0 34px rgba(79,110,247,.18);
+    }
+
+    .capability-head h3 { font-size: 1.22rem; }
+    .capability-kicker {
+      display: block;
+      margin-bottom: 5px;
+      font: 700 .72rem "JetBrains Mono";
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+
+    .capability-body {
+      position: relative;
+      z-index: 1;
+      padding: 16px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .skill-row {
+      display: grid;
+      grid-template-columns: 30px 1fr;
+      gap: 10px;
+      align-items: start;
+      padding: 12px;
+      border: 1px solid rgba(42,42,58,.74);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.032);
+      transition: transform .22s ease, border-color .22s ease, background .22s ease;
+    }
+
+    .skill-row:hover {
+      transform: translateY(-2px);
+      border-color: rgba(79,110,247,.64);
+      background: rgba(79,110,247,.07);
+    }
+
+    .skill-dot {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: rgba(79,110,247,.12);
+      color: var(--primary);
+      border: 1px solid rgba(79,110,247,.34);
+    }
+
+    .skill-row code, .skill-row strong {
+      display: block;
+      margin-bottom: 3px;
+      color: white;
+      font-size: .88rem;
+    }
+
+    .skill-row span {
+      color: #b7b7d4;
+      font-size: .88rem;
+    }
+
+    .capability-metrics {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      padding: 0 16px 16px;
+    }
+
+    .metric-chip {
+      min-height: 62px;
+      padding: 10px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(42,42,58,.78);
+      background: rgba(0,0,0,.16);
+    }
+
+    .metric-chip strong {
+      display: block;
+      color: white;
+      font: 800 1.08rem "Syne";
+    }
+
+    .metric-chip span {
+      color: var(--muted);
+      font-size: .74rem;
+    }
+
+    .ai-card {
+      background:
+        radial-gradient(circle at 18% 18%, rgba(232,64,64,.16), transparent 13rem),
+        radial-gradient(circle at 82% 5%, rgba(245,200,66,.12), transparent 13rem),
+        linear-gradient(180deg, rgba(22, 22, 31, .96), rgba(10, 10, 15, .92));
+    }
+
+    .ai-card .capability-icon {
+      background: rgba(232,64,64,.12);
+      border-color: rgba(232,64,64,.38);
+      box-shadow: 0 0 34px rgba(232,64,64,.18);
+    }
+
+    .model-switcher {
+      position: relative;
+      z-index: 1;
+      margin: 0 16px 16px;
+      padding: 12px;
+      border: 1px solid rgba(245,200,66,.28);
+      border-radius: var(--radius);
+      background: rgba(245,200,66,.055);
+      display: grid;
+      gap: 9px;
+    }
+
+    .model-track {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .model-pill {
+      padding: 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      color: #dcdcf0;
+      text-align: center;
+      font: 700 .72rem "JetBrains Mono";
+      background: rgba(0,0,0,.14);
+    }
+
+    .model-pill.active {
+      color: white;
+      border-color: rgba(79,110,247,.72);
+      background: rgba(79,110,247,.16);
+      box-shadow: 0 0 22px rgba(79,110,247,.22);
+    }
     code, pre {
       font-family: "JetBrains Mono", ui-monospace, monospace;
       color: #dfe4ff;
@@ -593,7 +794,7 @@
       .nav-links { display: none; }
       .hero-grid, .grid-2, .scenario-inner { grid-template-columns: 1fr; }
       .phone-stage { min-height: 520px; }
-      .grid-3, .pipeline, .flow, .stats, .roadmap, .mode-row, .command-strip, .ui-showcase { grid-template-columns: 1fr; }
+      .grid-3, .pipeline, .flow, .stats, .roadmap, .mode-row, .command-strip, .ui-showcase, .capability-grid { grid-template-columns: 1fr; }
       .pipeline::before, .pipeline::after { display: none; }
       section { padding: 72px 0; }
       .footer-grid { grid-template-columns: 1fr; }
@@ -608,6 +809,8 @@
       .scenario-button { grid-template-columns: 1fr; }
       .chev { display: none; }
       .phone { width: min(290px, 88vw); }
+      .capability-head, .skill-row { grid-template-columns: 1fr; }
+      .capability-metrics, .model-track { grid-template-columns: 1fr; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -707,35 +910,62 @@
           <div class="pipe-step"><strong>Action Log</strong><small>Full transparency and "Why?"</small></div>
         </div>
 
-        <div class="grid-3">
-          <article class="card reveal">
-            <div class="icon">🤚</div><h3>6 Action Skills (Hands)</h3>
-            <ul class="feature-list">
-              <li><code>dnd_setter</code> — Auto-enables Do Not Disturb before meetings</li>
-              <li><code>battery_warner</code> — SMS alert when battery is critically low</li>
-              <li><code>navigation_launcher</code> — Starts Maps when you leave a GPS cluster</li>
-              <li><code>message_drafter</code> — Writes context-aware SMS/emails via LLM</li>
-              <li><code>document_fetcher</code> — Pulls meeting files from Gmail + Drive</li>
-              <li><code>location_intelligence</code> — Labels Home, Office, Gym from GPS patterns</li>
-            </ul>
+        <div class="capability-grid">
+          <article class="capability-card reveal">
+            <div class="capability-head">
+              <div class="capability-icon">🤚</div>
+              <div><span class="capability-kicker">Hands · Automation layer</span><h3>6 Action Skills</h3></div>
+            </div>
+            <div class="capability-body">
+              <div class="skill-row"><div class="skill-dot"><i data-lucide="bell-off"></i></div><div><code>dnd_setter</code><span>Auto-enables Do Not Disturb before meetings.</span></div></div>
+              <div class="skill-row"><div class="skill-dot"><i data-lucide="battery-warning"></i></div><div><code>battery_warner</code><span>SMS alert when battery is critically low.</span></div></div>
+              <div class="skill-row"><div class="skill-dot"><i data-lucide="navigation"></i></div><div><code>navigation_launcher</code><span>Starts Maps when you leave a GPS cluster.</span></div></div>
+              <div class="skill-row"><div class="skill-dot"><i data-lucide="message-square-text"></i></div><div><code>message_drafter</code><span>Writes context-aware SMS/emails via LLM.</span></div></div>
+              <div class="skill-row"><div class="skill-dot"><i data-lucide="folder-search"></i></div><div><code>document_fetcher</code><span>Pulls meeting files from Gmail + Drive.</span></div></div>
+              <div class="skill-row"><div class="skill-dot"><i data-lucide="map-pinned"></i></div><div><code>location_intelligence</code><span>Labels Home, Office, Gym from GPS patterns.</span></div></div>
+            </div>
+            <div class="capability-metrics">
+              <div class="metric-chip"><strong>6</strong><span>skills live</span></div>
+              <div class="metric-chip"><strong>&lt;3s</strong><span>dispatch path</span></div>
+              <div class="metric-chip"><strong>Why?</strong><span>logged always</span></div>
+            </div>
           </article>
-          <article class="card reveal">
-            <div class="icon">🧠</div><h3>3 Memory Layers (Brain)</h3>
-            <ul class="feature-list">
-              <li><code>Routine Memory</code> — Learns weekly patterns</li>
-              <li><code>Preference Memory</code> — Adapts from approve/override history</li>
-              <li><code>Location Memory</code> — Infers Home/Office/Gym from GPS clusters</li>
-            </ul>
+          <article class="capability-card reveal">
+            <div class="capability-head">
+              <div class="capability-icon">🧠</div>
+              <div><span class="capability-kicker">Brain · Memory layer</span><h3>3 Memory Layers</h3></div>
+            </div>
+            <div class="capability-body">
+              <div class="skill-row"><div class="skill-dot"><i data-lucide="calendar-clock"></i></div><div><strong>Routine Memory</strong><span>Learns weekly patterns like Monday 9:30 AM standup.</span></div></div>
+              <div class="skill-row"><div class="skill-dot"><i data-lucide="thumbs-up"></i></div><div><strong>Preference Memory</strong><span>Adapts from your approve/override history.</span></div></div>
+              <div class="skill-row"><div class="skill-dot"><i data-lucide="map"></i></div><div><strong>Location Memory</strong><span>Infers Home, Office, and Gym from GPS clusters.</span></div></div>
+            </div>
+            <div class="capability-metrics">
+              <div class="metric-chip"><strong>Local</strong><span>first memory</span></div>
+              <div class="metric-chip"><strong>Learn</strong><span>mode default</span></div>
+              <div class="metric-chip"><strong>Clear</strong><span>delete data</span></div>
+            </div>
           </article>
-          <article class="card reveal">
-            <div class="icon">⚡</div><h3>OpenClaw AI Layer</h3>
-            <ul class="feature-list">
-              <li>Situation analysis every 15 min via Gemini 2.0 Flash or Groq</li>
-              <li>Produces context label, urgency, recommended skills, and reasoning</li>
-              <li>Message drafting in &lt;3 seconds</li>
-              <li>Multi-turn chat with Calendar/Gmail/Drive context</li>
-              <li>Every LLM call has a rule-based backup</li>
-            </ul>
+          <article class="capability-card ai-card reveal">
+            <div class="capability-head">
+              <div class="capability-icon">⚡</div>
+              <div><span class="capability-kicker">OpenClaw · AI layer</span><h3>Live Intelligence</h3></div>
+            </div>
+            <div class="capability-body">
+              <div class="skill-row"><div class="skill-dot"><i data-lucide="radar"></i></div><div><strong>Situation analysis</strong><span>Every 15 min via Gemini 2.0 Flash or Groq.</span></div></div>
+              <div class="skill-row"><div class="skill-dot"><i data-lucide="brain-circuit"></i></div><div><strong>Context reasoning</strong><span>Produces label, urgency, recommended skills, and reasoning.</span></div></div>
+              <div class="skill-row"><div class="skill-dot"><i data-lucide="wand-sparkles"></i></div><div><strong>Message drafting</strong><span>Context-aware drafts in &lt;3 seconds.</span></div></div>
+              <div class="skill-row"><div class="skill-dot"><i data-lucide="messages-square"></i></div><div><strong>Multi-turn chat</strong><span>Calendar/Gmail/Drive context without losing control.</span></div></div>
+              <div class="skill-row"><div class="skill-dot"><i data-lucide="shield-check"></i></div><div><strong>Rule fallback</strong><span>Every LLM call has a deterministic backup.</span></div></div>
+            </div>
+            <div class="model-switcher">
+              <strong>Hot-swap model router</strong>
+              <div class="model-track" aria-label="AI model hot-swap path">
+                <span class="model-pill active">Gemini Flash</span>
+                <span class="model-pill">Flash Lite</span>
+                <span class="model-pill">Groq</span>
+              </div>
+            </div>
           </article>
         </div>
       </div>
