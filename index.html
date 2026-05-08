@@ -318,7 +318,7 @@
 
     .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
     .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
-    .card, .scenario, .stat, .step-card, .comparison, .tech-panel {
+    .card, .scenario, .step-card, .comparison, .tech-panel, .detail-panel {
       border: 1px solid rgba(42, 42, 58, .9);
       background: linear-gradient(180deg, rgba(22, 22, 31, .9), rgba(17, 17, 24, .82));
       border-radius: var(--radius);
@@ -705,12 +705,7 @@
     td { color: #bbbbd4; }
     th:last-child, td:last-child { background: rgba(79,110,247,.09); color: #eff1ff; border-left: 1px solid rgba(79,110,247,.25); }
 
-    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-    .stat { padding: 24px; min-height: 170px; }
-    .stat strong { display: block; font-family: "Syne"; font-size: clamp(2.2rem, 4vw, 4.2rem); line-height: 1; color: white; text-shadow: 0 0 26px rgba(79,110,247,.38); }
-    .stat span { display: block; margin-top: 12px; color: #b7b7d2; }
-
-    .tech-toggle {
+    .tech-toggle, .detail-toggle {
       width: 100%;
       padding: 18px;
       display: flex;
@@ -722,9 +717,26 @@
       border-radius: var(--radius);
       cursor: pointer;
     }
+    .detail-toggle {
+      min-height: 76px;
+      margin-top: 12px;
+      background:
+        radial-gradient(circle at 8% 0%, rgba(79,110,247,.16), transparent 18rem),
+        rgba(22,22,31,.9);
+    }
+    .detail-toggle span {
+      display: grid;
+      gap: 4px;
+      text-align: left;
+    }
+    .detail-toggle strong { font-family: "Syne"; font-size: 1.1rem; color: white; }
+    .detail-toggle small { color: #aeb0d0; font-size: .86rem; }
     .tech-panel { max-height: 0; overflow: hidden; margin-top: 14px; transition: max-height .45s ease; }
     .tech-panel.open { max-height: 1200px; }
     .tech-inner { padding: 22px; display: grid; gap: 20px; }
+    .detail-panel { max-height: 0; overflow: hidden; margin-top: 14px; transition: max-height .45s ease; }
+    .detail-panel.open { max-height: 1400px; }
+    .detail-inner { padding: 22px; display: grid; gap: 18px; }
     .roadmap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
     .phase { position: relative; padding: 24px; border: 1px solid rgba(42,42,58,.85); background: rgba(17,17,24,.82); border-radius: var(--radius); }
     .phase::before { content: ""; position: absolute; top: -1px; left: 20px; right: 20px; height: 2px; background: linear-gradient(90deg, var(--accent), var(--primary), var(--gold)); }
@@ -762,7 +774,7 @@
       .nav-links { display: none; }
       .hero-grid, .grid-2, .scenario-inner { grid-template-columns: 1fr; }
       .phone-stage { min-height: 520px; }
-      .grid-3, .pipeline, .flow, .stats, .roadmap, .mode-row, .command-strip, .capability-grid { grid-template-columns: 1fr; }
+      .grid-3, .pipeline, .flow, .roadmap, .mode-row, .command-strip, .capability-grid { grid-template-columns: 1fr; }
       .pipeline::before, .pipeline::after { display: none; }
       section { padding: 72px 0; }
       .footer-grid { grid-template-columns: 1fr; }
@@ -1051,50 +1063,54 @@ Q3 deck referenced in meeting title → fetching from Drive.</pre>
           <h2>Setup once. ContextOS handles the rest.</h2>
           <p class="sub">Everything runs on your device. No data leaves your phone. Encrypted storage. GDPR compliant. Clear-all-data button.</p>
         </div>
-        <div class="flow">
-          <article class="step-card reveal"><h3>Login</h3><p class="muted">Sign in with Google account.</p></article>
-          <article class="step-card reveal"><h3>Grant Permissions</h3><p class="muted">Calendar, Location, Contacts, Notification access — all processed on-device.</p></article>
-          <article class="step-card reveal"><h3>Quick Setup (2 min)</h3><p class="muted">Set work hours, pin Home/Office on map, choose commute days.</p></article>
-          <article class="step-card reveal"><h3>It runs in the background</h3><p class="muted">Wakes every 15 min, builds your SituationModel, acts or asks.</p></article>
+        <button class="detail-toggle reveal" data-panel="setup-panel" aria-expanded="false">
+          <span><strong>Open Setup Flow</strong><small>Login, permissions, quick setup, background service, and control modes.</small></span>
+          <i data-lucide="chevron-down"></i>
+        </button>
+        <div class="detail-panel" id="setup-panel">
+          <div class="detail-inner">
+            <div class="flow">
+              <article class="step-card"><h3>Login</h3><p class="muted">Sign in with Google account.</p></article>
+              <article class="step-card"><h3>Grant Permissions</h3><p class="muted">Calendar, Location, Contacts, Notification access — all processed on-device.</p></article>
+              <article class="step-card"><h3>Quick Setup (2 min)</h3><p class="muted">Set work hours, pin Home/Office on map, choose commute days.</p></article>
+              <article class="step-card"><h3>It runs in the background</h3><p class="muted">Wakes every 15 min, builds your SituationModel, acts or asks.</p></article>
+            </div>
+            <div class="callout">ContextOS runs silently in the background as a persistent Android Foreground Service. It asks for your input only when it matters — like a great assistant who handles things without being asked, but always checks before sending.</div>
+            <div class="mode-row">
+              <div class="mode"><div class="toggle-dot"></div><h3>Auto-approve mode</h3><p class="muted">Executes trusted, learned patterns automatically.</p></div>
+              <div class="mode"><div class="toggle-dot"></div><h3>Learn mode (default)</h3><p class="muted">Asks for confirmation and learns preferences over time.</p></div>
+              <div class="mode"><div class="toggle-dot"></div><h3>AI Review Layer</h3><p class="muted">An optional agent reviews OpenClaw's recommendations before execution.</p></div>
+            </div>
+            <div class="callout"><strong>Hot-swap control:</strong> ContextOS can switch between Gemini Flash, Gemini Flash Lite, Groq fallback, and deterministic rules without changing the user flow. The UI shows which engine made the recommendation, how confident it was, and which fallback would run if AI is unavailable.</div>
+          </div>
         </div>
-        <div class="callout reveal" style="margin-top:18px;">ContextOS runs silently in the background as a persistent Android Foreground Service. It asks for your input only when it matters — like a great assistant who handles things without being asked, but always checks before sending.</div>
-        <div class="mode-row">
-          <div class="mode reveal"><div class="toggle-dot"></div><h3>Auto-approve mode</h3><p class="muted">Executes trusted, learned patterns automatically.</p></div>
-          <div class="mode reveal"><div class="toggle-dot"></div><h3>Learn mode (default)</h3><p class="muted">Asks for confirmation and learns preferences over time.</p></div>
-          <div class="mode reveal"><div class="toggle-dot"></div><h3>AI Review Layer</h3><p class="muted">An optional agent reviews OpenClaw's recommendations before execution.</p></div>
-        </div>
-        <div class="callout reveal" style="margin-top:18px;"><strong>Hot-swap control:</strong> ContextOS can switch between Gemini Flash, Gemini Flash Lite, Groq fallback, and deterministic rules without changing the user flow. The UI shows which engine made the recommendation, how confident it was, and which fallback would run if AI is unavailable.</div>
       </div>
     </section>
 
     <section id="comparison">
       <div class="container">
         <div class="section-head center reveal"><h2>Why not just use Bixby?</h2></div>
-        <div class="comparison reveal">
-          <table>
-            <thead><tr><th>Feature</th><th>Bixby / GA / Siri</th><th>Bixby Routines</th><th>ContextOS</th></tr></thead>
-            <tbody>
-              <tr><td>Interaction model</td><td>Reactive (waits for command)</td><td>Reactive (manual rule)</td><td>✅ Proactive — acts autonomously</td></tr>
-              <tr><td>Context awareness</td><td>Limited / basic</td><td>Trigger-based only</td><td>✅ Deep: 15-min SituationModel</td></tr>
-              <tr><td>Learning</td><td>None</td><td>None</td><td>✅ Routine + Preference + Location memory</td></tr>
-              <tr><td>Message drafting</td><td>None</td><td>None</td><td>✅ LLM-powered, context-aware</td></tr>
-              <tr><td>Document orchestration</td><td>None</td><td>None</td><td>✅ Gmail + Drive pre-meeting search</td></tr>
-              <tr><td>Processing location</td><td>Cloud-dependent</td><td>On-device (limited)</td><td>✅ On-device first, cloud opt-in</td></tr>
-              <tr><td>Transparency</td><td>Opaque</td><td>Manual config visible</td><td>✅ Full action log + "Why?" reasoning</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <section id="impact">
-      <div class="container">
-        <div class="section-head reveal"><h2>The numbers speak.</h2></div>
-        <div class="stats">
-          <div class="stat reveal"><strong><span class="counter" data-target="60" data-prefix="40–">0</span></strong><span>Micro-decisions eliminated daily per user</span></div>
-          <div class="stat reveal"><strong><span class="counter" data-target="45" data-prefix="30–">0</span> min</strong><span>Saved per user per day</span></div>
-          <div class="stat reveal"><strong><span class="counter" data-target="500" data-suffix="M+">0</span></strong><span>TAM: smartphone users with complex schedules</span></div>
-          <div class="stat reveal"><strong>&lt;<span class="counter" data-target="5" data-suffix="%">0</span></strong><span>Target battery overhead over 8hr day</span></div>
+        <button class="detail-toggle reveal" data-panel="comparison-panel" aria-expanded="false">
+          <span><strong>Open Comparison Table</strong><small>See how ContextOS differs from assistants and manual routines.</small></span>
+          <i data-lucide="chevron-down"></i>
+        </button>
+        <div class="detail-panel" id="comparison-panel">
+          <div class="detail-inner">
+            <div class="comparison">
+              <table>
+                <thead><tr><th>Feature</th><th>Bixby / GA / Siri</th><th>Bixby Routines</th><th>ContextOS</th></tr></thead>
+                <tbody>
+                  <tr><td>Interaction model</td><td>Reactive (waits for command)</td><td>Reactive (manual rule)</td><td>✅ Proactive — acts autonomously</td></tr>
+                  <tr><td>Context awareness</td><td>Limited / basic</td><td>Trigger-based only</td><td>✅ Deep: 15-min SituationModel</td></tr>
+                  <tr><td>Learning</td><td>None</td><td>None</td><td>✅ Routine + Preference + Location memory</td></tr>
+                  <tr><td>Message drafting</td><td>None</td><td>None</td><td>✅ LLM-powered, context-aware</td></tr>
+                  <tr><td>Document orchestration</td><td>None</td><td>None</td><td>✅ Gmail + Drive pre-meeting search</td></tr>
+                  <tr><td>Processing location</td><td>Cloud-dependent</td><td>On-device (limited)</td><td>✅ On-device first, cloud opt-in</td></tr>
+                  <tr><td>Transparency</td><td>Opaque</td><td>Manual config visible</td><td>✅ Full action log + "Why?" reasoning</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -1219,29 +1235,13 @@ Total: 12s compute + 3s dispatch = &lt;15s per cycle</pre>
         techButton.querySelector("span").textContent = isOpen ? "Hide Tech Details" : "Show Tech Details";
       });
 
-      const counters = [...document.querySelectorAll(".counter")];
-      let counted = false;
-      const countObserver = new IntersectionObserver((entries) => {
-        if (counted || !entries.some(entry => entry.isIntersecting)) return;
-        counted = true;
-        counters.forEach(counter => {
-          const target = Number(counter.dataset.target);
-          const prefix = counter.dataset.prefix || "";
-          const suffix = counter.dataset.suffix || "";
-          const start = performance.now();
-          const duration = 1200;
-          const tick = (now) => {
-            const progress = Math.min((now - start) / duration, 1);
-            const eased = 1 - Math.pow(1 - progress, 3);
-            const value = Math.round(target * eased);
-            counter.textContent = prefix + value + suffix;
-            if (progress < 1) requestAnimationFrame(tick);
-          };
-          requestAnimationFrame(tick);
+      document.querySelectorAll(".detail-toggle").forEach(button => {
+        button.addEventListener("click", () => {
+          const panel = document.getElementById(button.dataset.panel);
+          const isOpen = panel.classList.toggle("open");
+          button.setAttribute("aria-expanded", String(isOpen));
         });
-      }, { threshold: 0.35 });
-      const impact = document.querySelector("#impact");
-      if (impact) countObserver.observe(impact);
+      });
     });
   </script>
 </body>
