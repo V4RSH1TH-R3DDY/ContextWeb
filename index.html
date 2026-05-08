@@ -1,15 +1,1090 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ContextOS</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="ContextOS is a proactive, privacy-first Android phone orchestrator that acts before you ask." />
+  <title>ContextOS | Proactive Phone Orchestrator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0A0A0F;
+      --surface: #111118;
+      --card: #16161F;
+      --border: #2A2A3A;
+      --primary: #4F6EF7;
+      --accent: #E84040;
+      --gold: #F5C842;
+      --text: #E8E8F0;
+      --muted: #7070A0;
+      --ok: #56D89B;
+      --warning: #FFB86B;
+      --shadow: 0 24px 80px rgba(0, 0, 0, .48);
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 20% -10%, rgba(79, 110, 247, .22), transparent 34rem),
+        radial-gradient(circle at 90% 8%, rgba(232, 64, 64, .13), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      font-family: "DM Sans", system-ui, sans-serif;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background-image:
+        linear-gradient(rgba(232, 232, 240, .045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(232, 232, 240, .045) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,.9), rgba(0,0,0,.18));
+      animation: gridDrift 28s linear infinite;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background: linear-gradient(180deg, transparent, rgba(10, 10, 15, .88) 65%, var(--bg));
+    }
+
+    @keyframes gridDrift {
+      from { background-position: 0 0; }
+      to { background-position: 64px 64px; }
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    .container { width: min(1160px, calc(100% - 40px)); margin: 0 auto; }
+
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: rgba(10, 10, 15, .68);
+      border-bottom: 1px solid rgba(42, 42, 58, .66);
+    }
+
+    .nav-inner {
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: "Syne", sans-serif;
+      font-weight: 800;
+      letter-spacing: 0;
+      color: white;
+      text-shadow: 0 0 24px rgba(79, 110, 247, .7);
+      white-space: nowrap;
+    }
+
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius);
+      background: rgba(232, 64, 64, .14);
+      border: 1px solid rgba(232, 64, 64, .42);
+      color: var(--accent);
+      box-shadow: 0 0 22px rgba(232, 64, 64, .22);
+    }
+
+    .nav-links { display: flex; align-items: center; gap: 18px; color: #b9b9d5; font-size: .92rem; }
+    .nav-links a:hover { color: white; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 46px;
+      padding: 0 18px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      color: var(--text);
+      background: rgba(22, 22, 31, .82);
+      cursor: pointer;
+      transition: transform .22s ease, border-color .22s ease, background .22s ease, box-shadow .22s ease;
+    }
+
+    .btn:hover { transform: translateY(-2px); border-color: rgba(79, 110, 247, .7); }
+    .btn-primary {
+      border-color: rgba(79, 110, 247, .75);
+      background: linear-gradient(135deg, var(--primary), #6D88FF);
+      color: white;
+      box-shadow: 0 14px 42px rgba(79, 110, 247, .3);
+      font-weight: 800;
+    }
+    .btn-quiet { background: rgba(255,255,255,.04); }
+
+    main { padding-top: 68px; }
+    section { padding: 96px 0; position: relative; }
+    .hero { min-height: calc(100vh - 68px); display: flex; align-items: center; padding: 72px 0 56px; }
+    .hero-grid { display: grid; grid-template-columns: minmax(0, 1.03fr) minmax(320px, .72fr); align-items: center; gap: 54px; }
+
+    .badge, .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      border: 1px solid rgba(79, 110, 247, .34);
+      border-radius: 999px;
+      background: rgba(79, 110, 247, .09);
+      color: #d9dfff;
+      padding: 8px 12px;
+      font-size: .82rem;
+      font-weight: 800;
+    }
+
+    h1, h2, h3 {
+      font-family: "Syne", sans-serif;
+      letter-spacing: 0;
+      line-height: 1.02;
+      margin: 0;
+    }
+    h1 {
+      margin-top: 22px;
+      font-size: clamp(3.2rem, 8vw, 7.4rem);
+      max-width: 920px;
+    }
+    h2 { font-size: clamp(2.15rem, 4.6vw, 4.2rem); max-width: 900px; }
+    h3 { font-size: 1.12rem; }
+    .lead {
+      color: #c2c2df;
+      font-size: clamp(1.05rem, 1.8vw, 1.34rem);
+      max-width: 760px;
+      margin: 24px 0 0;
+    }
+    .section-head { display: grid; gap: 14px; margin-bottom: 34px; }
+    .section-head.center { text-align: center; justify-items: center; }
+    .sub { color: #b7b7d4; max-width: 780px; margin: 0; font-size: 1.08rem; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
+    .hero-meta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; color: var(--muted); font-size: .92rem; }
+    .meta-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 11px; border: 1px solid rgba(42,42,58,.82); background: rgba(17,17,24,.68); border-radius: var(--radius); }
+
+    .command-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 22px;
+      padding: 12px;
+      border: 1px solid rgba(79, 110, 247, .22);
+      border-radius: var(--radius);
+      background: rgba(17, 17, 24, .72);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+    }
+    .command-chip {
+      min-height: 74px;
+      padding: 12px;
+      border: 1px solid rgba(42,42,58,.78);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.025);
+      display: grid;
+      gap: 4px;
+    }
+    .command-chip strong {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: .84rem;
+      color: white;
+    }
+    .command-chip span {
+      color: #a8a8cc;
+      font-size: .78rem;
+    }
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--ok);
+      box-shadow: 0 0 16px rgba(86,216,155,.8);
+      animation: livePulse 1.55s ease-in-out infinite;
+    }
+    @keyframes livePulse { 50% { transform: scale(1.7); opacity: .62; } }
+
+    .phone-stage { position: relative; min-height: 620px; display: grid; place-items: center; }
+    .phone-glow {
+      position: absolute;
+      width: 320px;
+      height: 590px;
+      border-radius: 44px;
+      background: rgba(79, 110, 247, .18);
+      filter: blur(42px);
+      animation: pulseGlow 3s ease-in-out infinite;
+    }
+    @keyframes pulseGlow { 50% { transform: scale(1.06); opacity: .75; } }
+
+    .phone {
+      position: relative;
+      width: min(330px, 84vw);
+      aspect-ratio: 9 / 18.6;
+      border-radius: 40px;
+      padding: 14px;
+      background: linear-gradient(145deg, #262638, #09090d 42%, #171721);
+      border: 1px solid rgba(148, 162, 255, .38);
+      box-shadow: 0 0 0 8px rgba(79,110,247,.05), 0 0 70px rgba(79,110,247,.28), var(--shadow);
+      animation: floatPhone 6s ease-in-out infinite;
+    }
+    @keyframes floatPhone { 50% { transform: translateY(-14px) rotate(-1deg); } }
+
+    .screen {
+      position: relative;
+      height: 100%;
+      overflow: hidden;
+      border-radius: 30px;
+      border: 1px solid rgba(255,255,255,.08);
+      background:
+        radial-gradient(circle at 48% 24%, rgba(79, 110, 247, .3), transparent 14rem),
+        linear-gradient(180deg, #11111a, #08080c);
+    }
+    .notch { position: absolute; top: 14px; left: 50%; transform: translateX(-50%); width: 88px; height: 24px; border-radius: 99px; background: #050508; z-index: 2; }
+    .phone-time { position: absolute; top: 52px; left: 22px; right: 22px; display: flex; justify-content: space-between; color: #d7d7ea; font: 700 .82rem "JetBrains Mono"; }
+    .context-map {
+      position: absolute;
+      inset: 104px 22px 150px;
+      border: 1px solid rgba(79, 110, 247, .18);
+      background-image:
+        linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+      background-size: 28px 28px;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .route { position: absolute; inset: 0; }
+    .route path { stroke: var(--primary); stroke-width: 4; fill: none; stroke-dasharray: 12 12; animation: dash 2s linear infinite; filter: drop-shadow(0 0 8px rgba(79,110,247,.7)); }
+    @keyframes dash { to { stroke-dashoffset: -48; } }
+    .pin { position: absolute; width: 14px; height: 14px; border-radius: 999px; background: var(--gold); box-shadow: 0 0 18px rgba(245,200,66,.88); }
+    .pin.one { top: 25%; left: 23%; }
+    .pin.two { top: 64%; left: 68%; background: var(--accent); box-shadow: 0 0 18px rgba(232,64,64,.8); }
+    .notify-stack { position: absolute; left: 18px; right: 18px; bottom: 86px; height: 112px; }
+    .notification {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      align-content: center;
+      gap: 8px;
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(18, 18, 28, .82);
+      backdrop-filter: blur(14px);
+      opacity: 0;
+      transform: translateY(18px) scale(.98);
+      transition: opacity .55s ease, transform .55s ease;
+      box-shadow: 0 22px 50px rgba(0,0,0,.44);
+    }
+    .notification.active { opacity: 1; transform: translateY(0) scale(1); }
+    .notification strong { font-size: .98rem; }
+    .notification span { color: #aaaad2; font-size: .78rem; }
+    .dock {
+      position: absolute;
+      left: 40px;
+      right: 40px;
+      bottom: 26px;
+      height: 40px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+    }
+    .dock i { width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,.42); }
+
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+    .card, .scenario, .stat, .step-card, .comparison, .tech-panel {
+      border: 1px solid rgba(42, 42, 58, .9);
+      background: linear-gradient(180deg, rgba(22, 22, 31, .9), rgba(17, 17, 24, .82));
+      border-radius: var(--radius);
+      box-shadow: 0 16px 48px rgba(0,0,0,.2);
+    }
+    .card { padding: 22px; min-height: 100%; }
+    .icon {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius);
+      background: rgba(79,110,247,.1);
+      border: 1px solid rgba(79,110,247,.32);
+      margin-bottom: 16px;
+      font-size: 1.3rem;
+    }
+    .card p { color: #b8b8d0; margin: 12px 0 0; }
+
+    .pipeline {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin: 30px 0;
+    }
+    .pipeline::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 4%;
+      right: 4%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(79,110,247,.68), transparent);
+      transform: translateY(-50%);
+      z-index: 0;
+    }
+    .pipeline::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 3%;
+      width: 14%;
+      height: 3px;
+      border-radius: 99px;
+      background: var(--primary);
+      box-shadow: 0 0 22px var(--primary);
+      transform: translateY(-50%);
+      animation: travelPulse 5s ease-in-out infinite;
+      z-index: 1;
+    }
+    @keyframes travelPulse {
+      0%, 100% { left: 3%; }
+      25% { left: 23%; }
+      50% { left: 43%; }
+      75% { left: 63%; }
+      90% { left: 83%; }
+    }
+    .pipe-step {
+      position: relative;
+      z-index: 2;
+      padding: 18px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(79,110,247,.2);
+      background: rgba(17,17,24,.92);
+      min-height: 145px;
+      animation: stepGlow 5s ease-in-out infinite;
+    }
+    .pipe-step:nth-child(2) { animation-delay: 1s; }
+    .pipe-step:nth-child(3) { animation-delay: 2s; }
+    .pipe-step:nth-child(4) { animation-delay: 3s; }
+    .pipe-step:nth-child(5) { animation-delay: 4s; }
+    @keyframes stepGlow {
+      0%, 28%, 100% { border-color: rgba(42,42,58,.9); box-shadow: none; }
+      10% { border-color: rgba(79,110,247,.85); box-shadow: 0 0 30px rgba(79,110,247,.22); }
+    }
+    .pipe-step small, .muted { color: var(--muted); }
+    .pipe-step strong { display: block; margin-bottom: 8px; }
+
+    .feature-list { list-style: none; padding: 0; margin: 14px 0 0; display: grid; gap: 10px; }
+    .feature-list li {
+      padding: 10px 0;
+      border-top: 1px solid rgba(42,42,58,.66);
+      color: #c4c4dd;
+    }
+    code, pre {
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      color: #dfe4ff;
+    }
+    code { color: #bfc9ff; }
+
+    .scenario-list { display: grid; gap: 14px; }
+    .scenario { overflow: hidden; }
+    .scenario-button {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      align-items: center;
+      text-align: left;
+      border: 0;
+      color: var(--text);
+      background: transparent;
+      padding: 22px;
+      cursor: pointer;
+    }
+    .scenario-button h3 { margin-bottom: 8px; }
+    .scenario-button .tagline { color: #acacd0; }
+    .chev { width: 38px; height: 38px; border-radius: var(--radius); display: grid; place-items: center; border: 1px solid var(--border); transition: transform .25s ease; }
+    .scenario.open .chev { transform: rotate(180deg); color: var(--primary); }
+    .scenario-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .42s ease;
+    }
+    .scenario.open .scenario-body { max-height: 820px; }
+    .scenario-inner { padding: 0 22px 24px; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(260px, .9fr); gap: 20px; }
+    .timeline { display: grid; gap: 10px; }
+    .timeline-row {
+      display: grid;
+      grid-template-columns: 86px 1fr;
+      gap: 14px;
+      align-items: start;
+      padding: 12px;
+      border: 1px solid rgba(42,42,58,.72);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.025);
+    }
+    .time { font-family: "JetBrains Mono"; color: var(--gold); font-size: .82rem; padding-top: 2px; }
+    .outcome {
+      display: inline-flex;
+      width: fit-content;
+      margin-top: 14px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      color: #deffee;
+      background: rgba(86,216,155,.1);
+      border: 1px solid rgba(86,216,155,.32);
+      font-weight: 800;
+    }
+    .reason-box, .privacy-box, .callout, pre {
+      border: 1px solid rgba(79,110,247,.28);
+      background: rgba(79,110,247,.075);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+    .reason-box p { margin: 0; color: #d6dafb; }
+    .reason-box pre, .tech-panel pre { margin: 12px 0 0; white-space: pre-wrap; background: rgba(0,0,0,.18); }
+
+    .stack-box {
+      border: 1px solid rgba(245,200,66,.28);
+      background: rgba(245,200,66,.065);
+      border-radius: var(--radius);
+      padding: 20px;
+      font-family: "JetBrains Mono";
+      color: #f5f1d3;
+      white-space: pre-wrap;
+    }
+    .ui-showcase {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .ui-tile {
+      padding: 16px;
+      border: 1px solid rgba(42,42,58,.86);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.015));
+      min-height: 128px;
+      position: relative;
+      overflow: hidden;
+    }
+    .ui-tile::after {
+      content: "";
+      position: absolute;
+      inset: auto 14px 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+      opacity: .75;
+    }
+    .ui-tile i { color: var(--primary); margin-bottom: 10px; }
+    .ui-tile h3 { font-size: 1rem; margin-bottom: 8px; }
+    .ui-tile p { margin: 0; color: #aaaad0; font-size: .9rem; }
+    .privacy-box {
+      margin-top: 20px;
+      border-color: rgba(86,216,155,.36);
+      background: linear-gradient(135deg, rgba(86,216,155,.1), rgba(79,110,247,.075));
+      font-size: 1.04rem;
+    }
+    .flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; counter-reset: flow; }
+    .flow .step-card { padding: 18px; position: relative; min-height: 190px; }
+    .flow .step-card::before {
+      counter-increment: flow;
+      content: counter(flow);
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+    .mode-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 18px; }
+    .mode { padding: 18px; border: 1px solid rgba(42,42,58,.8); border-radius: var(--radius); background: rgba(255,255,255,.025); }
+    .toggle-dot { width: 48px; height: 26px; background: rgba(79,110,247,.28); border: 1px solid rgba(79,110,247,.54); border-radius: 999px; margin-bottom: 12px; position: relative; }
+    .toggle-dot::after { content: ""; position: absolute; top: 4px; left: 22px; width: 16px; height: 16px; border-radius: 50%; background: white; box-shadow: 0 0 16px rgba(79,110,247,.8); }
+
+    .comparison { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 760px; }
+    th, td { padding: 16px; border-bottom: 1px solid rgba(42,42,58,.85); text-align: left; vertical-align: top; }
+    th { color: white; font-family: "Syne"; }
+    td { color: #bbbbd4; }
+    th:last-child, td:last-child { background: rgba(79,110,247,.09); color: #eff1ff; border-left: 1px solid rgba(79,110,247,.25); }
+
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .stat { padding: 24px; min-height: 170px; }
+    .stat strong { display: block; font-family: "Syne"; font-size: clamp(2.2rem, 4vw, 4.2rem); line-height: 1; color: white; text-shadow: 0 0 26px rgba(79,110,247,.38); }
+    .stat span { display: block; margin-top: 12px; color: #b7b7d2; }
+
+    .tech-toggle {
+      width: 100%;
+      padding: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--text);
+      background: rgba(22,22,31,.9);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+    }
+    .tech-panel { max-height: 0; overflow: hidden; margin-top: 14px; transition: max-height .45s ease; }
+    .tech-panel.open { max-height: 1200px; }
+    .tech-inner { padding: 22px; display: grid; gap: 20px; }
+    .roadmap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .phase { position: relative; padding: 24px; border: 1px solid rgba(42,42,58,.85); background: rgba(17,17,24,.82); border-radius: var(--radius); }
+    .phase::before { content: ""; position: absolute; top: -1px; left: 20px; right: 20px; height: 2px; background: linear-gradient(90deg, var(--accent), var(--primary), var(--gold)); }
+
+    footer {
+      padding: 44px 0;
+      border-top: 1px solid rgba(42,42,58,.85);
+      background: rgba(5,5,8,.55);
+    }
+    .footer-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; align-items: end; }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 14px; justify-content: flex-end; color: #b9b9d5; }
+    .social-icons { display: flex; justify-content: flex-end; gap: 10px; margin-top: 14px; }
+    .social-icon {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius);
+      border: 1px solid rgba(79,110,247,.34);
+      background: rgba(79,110,247,.08);
+      color: white;
+      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+    .social-icon:hover {
+      transform: translateY(-2px);
+      border-color: rgba(79,110,247,.82);
+      box-shadow: 0 0 26px rgba(79,110,247,.22);
+    }
+    .small-print { color: var(--muted); margin-top: 10px; }
+
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity .65s ease, transform .65s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 980px) {
+      .nav-links { display: none; }
+      .hero-grid, .grid-2, .scenario-inner { grid-template-columns: 1fr; }
+      .phone-stage { min-height: 520px; }
+      .grid-3, .pipeline, .flow, .stats, .roadmap, .mode-row, .command-strip, .ui-showcase { grid-template-columns: 1fr; }
+      .pipeline::before, .pipeline::after { display: none; }
+      section { padding: 72px 0; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-links, .social-icons { justify-content: flex-start; }
+    }
+    @media (max-width: 620px) {
+      .container { width: min(100% - 28px, 1160px); }
+      h1 { font-size: 3rem; }
+      .hero { padding-top: 42px; }
+      .hero-actions .btn { width: 100%; }
+      .timeline-row { grid-template-columns: 1fr; gap: 6px; }
+      .scenario-button { grid-template-columns: 1fr; }
+      .chev { display: none; }
+      .phone { width: min(290px, 88vw); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition: none !important; }
+    }
+  </style>
 </head>
-
 <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-</body>
+  <nav class="nav" aria-label="Primary navigation">
+    <div class="container nav-inner">
+      <a class="brand" href="#top" aria-label="ContextOS home"><span class="mark">🦾</span>ContextOS</a>
+      <div class="nav-links">
+        <a href="#how-it-works">How it works</a>
+        <a href="#scenarios">Scenarios</a>
+        <a href="#openclaw">OpenClaw</a>
+        <a href="#privacy">Privacy</a>
+        <a href="#tech">Tech</a>
+      </div>
+    </div>
+  </nav>
 
+  <main id="top">
+    <section class="hero" id="demo">
+      <div class="container hero-grid">
+        <div class="reveal">
+          <div class="badge">🔴 LIVE · Samsung PRISM Hackathon 2025</div>
+          <h1>Your Phone Knows What You're Doing.</h1>
+          <p class="lead">ContextOS — The Proactive, Privacy-First Phone Orchestrator. It acts before you ask.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#demo"><i data-lucide="play"></i>Watch Demo</a>
+            <a class="btn btn-quiet" href="#how-it-works"><i data-lucide="workflow"></i>See How It Works</a>
+            <a class="btn btn-quiet" href="#scenarios"><i data-lucide="sparkles"></i>See It Think</a>
+          </div>
+          <div class="hero-meta" aria-label="Product guarantees">
+            <span class="meta-pill"><i data-lucide="shield-check"></i>Privacy-first by design</span>
+            <span class="meta-pill"><i data-lucide="brain-circuit"></i>Gemini + Groq fallback</span>
+            <span class="meta-pill"><i data-lucide="list-checks"></i>Every action explains why</span>
+            <span class="meta-pill"><i data-lucide="refresh-cw"></i>Hot-swap AI models</span>
+          </div>
+          <div class="command-strip" aria-label="Live ContextOS control features">
+            <div class="command-chip"><strong><span class="live-dot"></span>Live SituationModel</strong><span>15-min context refresh with visible reasoning.</span></div>
+            <div class="command-chip"><strong><i data-lucide="replace"></i>Hot Swap</strong><span>Gemini Flash, Flash Lite, or Groq fallback per task.</span></div>
+            <div class="command-chip"><strong><i data-lucide="sliders-horizontal"></i>Control Modes</strong><span>Learn, confirm, auto-approve, or review before action.</span></div>
+            <div class="command-chip"><strong><i data-lucide="history"></i>Action Replay</strong><span>Tap any automation to see what happened and why.</span></div>
+          </div>
+        </div>
+        <div class="phone-stage reveal" aria-label="Animated ContextOS phone mockup">
+          <div class="phone-glow"></div>
+          <div class="phone">
+            <div class="screen">
+              <div class="notch"></div>
+              <div class="phone-time"><span>09:50</span><span>ContextOS</span></div>
+              <div class="context-map" aria-hidden="true">
+                <svg class="route" viewBox="0 0 260 360" preserveAspectRatio="none">
+                  <path d="M36 86 C 90 64, 88 160, 138 152 S 168 242, 224 250" />
+                </svg>
+                <span class="pin one"></span>
+                <span class="pin two"></span>
+              </div>
+              <div class="notify-stack">
+                <div class="notification active"><strong>🔔 DND enabled. Client Review in 10 min.</strong><span>Why: 4 attendees, DND was off, Zoom link detected.</span></div>
+                <div class="notification"><strong>🗺️ Navigation home started — ETA 35 min.</strong><span>Why: leaving Office cluster, commute day, partner at home.</span></div>
+                <div class="notification"><strong>📄 2 files found for your Q3 Review meeting.</strong><span>Open Drive · Open Gmail · Ask why</span></div>
+              </div>
+              <div class="dock" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="problem">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="tag">No interruptions. Just results.</span>
+          <h2>Smartphones are reactive. You shouldn't have to be.</h2>
+        </div>
+        <div class="grid-3">
+          <article class="card reveal"><div class="icon">🧠</div><h3>40–60 micro-decisions/day</h3><p>Enable DND. Start navigation. Download meeting docs. Your phone waits for commands while you scramble.</p></article>
+          <article class="card reveal"><div class="icon">⏱️</div><h3>Every missed action has a cost</h3><p>A meeting interrupted by a ring. Late to a client site because navigation wasn't started in time.</p></article>
+          <article class="card reveal"><div class="icon">📱</div><h3>500M+ users, zero proactive intelligence</h3><p>No assistant today acts before you ask. They all wait. ContextOS doesn't.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="how-it-works">
+      <div class="container">
+        <div class="section-head center reveal">
+          <h2>One agent. Every context. Zero commands.</h2>
+          <p class="sub">ContextOS wakes every 15 minutes, builds a SituationModel of your world, and executes the right action — automatically.</p>
+        </div>
+        <div class="pipeline reveal" aria-label="ContextOS automation pipeline">
+          <div class="pipe-step"><strong>Sensors Collect</strong><small>Battery · GPS · Calendar · Audio · Usage</small></div>
+          <div class="pipe-step"><strong>OpenClaw AI</strong><small>SituationModel + LLM reasoning</small></div>
+          <div class="pipe-step"><strong>Skills Evaluate</strong><small>shouldTrigger() per skill</small></div>
+          <div class="pipe-step"><strong>Action Dispatch</strong><small>Auto-execute or confirm</small></div>
+          <div class="pipe-step"><strong>Action Log</strong><small>Full transparency and "Why?"</small></div>
+        </div>
+
+        <div class="grid-3">
+          <article class="card reveal">
+            <div class="icon">🤚</div><h3>6 Action Skills (Hands)</h3>
+            <ul class="feature-list">
+              <li><code>dnd_setter</code> — Auto-enables Do Not Disturb before meetings</li>
+              <li><code>battery_warner</code> — SMS alert when battery is critically low</li>
+              <li><code>navigation_launcher</code> — Starts Maps when you leave a GPS cluster</li>
+              <li><code>message_drafter</code> — Writes context-aware SMS/emails via LLM</li>
+              <li><code>document_fetcher</code> — Pulls meeting files from Gmail + Drive</li>
+              <li><code>location_intelligence</code> — Labels Home, Office, Gym from GPS patterns</li>
+            </ul>
+          </article>
+          <article class="card reveal">
+            <div class="icon">🧠</div><h3>3 Memory Layers (Brain)</h3>
+            <ul class="feature-list">
+              <li><code>Routine Memory</code> — Learns weekly patterns</li>
+              <li><code>Preference Memory</code> — Adapts from approve/override history</li>
+              <li><code>Location Memory</code> — Infers Home/Office/Gym from GPS clusters</li>
+            </ul>
+          </article>
+          <article class="card reveal">
+            <div class="icon">⚡</div><h3>OpenClaw AI Layer</h3>
+            <ul class="feature-list">
+              <li>Situation analysis every 15 min via Gemini 2.0 Flash or Groq</li>
+              <li>Produces context label, urgency, recommended skills, and reasoning</li>
+              <li>Message drafting in &lt;3 seconds</li>
+              <li>Multi-turn chat with Calendar/Gmail/Drive context</li>
+              <li>Every LLM call has a rule-based backup</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="scenarios">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="tag">ContextOS: Your phone knows what you're doing.</span>
+          <h2>Real Scenarios. Real Automation.</h2>
+          <p class="sub">See how ContextOS handles the situations your phone ignores.</p>
+        </div>
+        <div class="scenario-list">
+          <article class="scenario open reveal">
+            <button class="scenario-button" aria-expanded="true">
+              <span><h3>🗂️ The Busy Professional</h3><span class="tagline">9:50 AM · Client Review in 10 min</span></span>
+              <span class="chev"><i data-lucide="chevron-down"></i></span>
+            </button>
+            <div class="scenario-body">
+              <div class="scenario-inner">
+                <div>
+                  <p class="muted">Trigger context: Calendar shows "Client Review" meeting with 4 attendees in 10 minutes. DND is off. Zoom link detected.</p>
+                  <div class="timeline">
+                    <div class="timeline-row"><span class="time">9:50 AM</span><span>🔔 DND auto-enabled until 11 AM</span></div>
+                    <div class="timeline-row"><span class="time">9:51 AM</span><span>📂 Q3 Deck fetched from Google Drive</span></div>
+                    <div class="timeline-row"><span class="time">9:52 AM</span><span>🎥 Zoom meeting link pre-opened</span></div>
+                    <div class="timeline-row"><span class="time">9:52 AM</span><span>🧾 Action Log records attendee count, DND state, Zoom link, and file match</span></div>
+                    <div class="timeline-row"><span class="time">10:45 AM</span><span>🗺️ Meeting ends → navigation to Koramangala auto-starts, "On my way" draft ready</span></div>
+                  </div>
+                  <span class="outcome">✅ 3 actions automated. 0 interruptions during meeting.</span>
+                </div>
+                <div class="reason-box">
+                  <h3>Why?</h3>
+                  <pre>Agent reasoning: Meeting has 4 attendees (high importance).
+DND was OFF — enabling now.
+Zoom link in calendar → pre-opening.
+Q3 deck referenced in meeting title → fetching from Drive.</pre>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="scenario reveal">
+            <button class="scenario-button" aria-expanded="false">
+              <span><h3>🚗 The Commuter</h3><span class="tagline">6:30 PM · Leaving Office</span></span>
+              <span class="chev"><i data-lucide="chevron-down"></i></span>
+            </button>
+            <div class="scenario-body">
+              <div class="scenario-inner">
+                <div>
+                  <p class="muted">Trigger context: GPS detects departure from "Office" cluster. Partner waiting at home. Battery at 18%.</p>
+                  <div class="timeline">
+                    <div class="timeline-row"><span class="time">6:30 PM</span><span>🗺️ Navigation home launched automatically</span></div>
+                    <div class="timeline-row"><span class="time">6:31 PM</span><span>💬 ETA draft prepared: "Leaving now, ETA ~35 min. See you soon!"</span></div>
+                    <div class="timeline-row"><span class="time">6:32 PM</span><span>🔋 Battery 18% + 7:30 PM meeting detected → Emergency SMS drafted to contact</span></div>
+                    <div class="timeline-row"><span class="time">6:33 PM</span><span>📳 Low-battery mode + screen brightness reduced</span></div>
+                  </div>
+                  <span class="outcome">✅ Partner informed. Contact alerted. No manual steps.</span>
+                </div>
+                <div class="reason-box"><h3>AI tool usage</h3><p>Gemini Flash drafts human-sounding ETA text, OpenClaw checks confidence, and the rule fallback can still trigger Maps and battery actions without an LLM.</p></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="scenario reveal">
+            <button class="scenario-button" aria-expanded="false">
+              <span><h3>✈️ The Traveler</h3><span class="tagline">2:00 PM · Unfamiliar Client Site</span></span>
+              <span class="chev"><i data-lucide="chevron-down"></i></span>
+            </button>
+            <div class="scenario-body">
+              <div class="scenario-inner">
+                <div>
+                  <p class="muted">Trigger context: GPS at unknown location. Calendar: "Q3 Review" meeting in 15 min. Multiple files in Gmail + Drive matching "Q3 Review".</p>
+                  <div class="timeline">
+                    <div class="timeline-row"><span class="time">2:00 PM</span><span>🔇 Priority-only notification mode enabled silently</span></div>
+                    <div class="timeline-row"><span class="time">2:15 PM</span><span>📄 Gmail + Drive searched for "Q3 Review"</span></div>
+                    <div class="timeline-row"><span class="time">2:15 PM</span><span>🔗 2 files surfaced: Q3_Deck.pptx [Open Drive] Budget_Email [Open Gmail]</span></div>
+                    <div class="timeline-row"><span class="time">2:45 PM</span><span>💬 Context-aware auto-reply drafted for incoming messages</span></div>
+                  </div>
+                  <span class="outcome">✅ Always prepared. Notification chaos eliminated.</span>
+                </div>
+                <div class="reason-box"><h3>Why?</h3><p>Unknown location raises meeting urgency. File search uses Calendar title, attendees, and recent Gmail/Drive metadata; sensitive fields are masked before AI reasoning.</p></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="scenario reveal">
+            <button class="scenario-button" aria-expanded="false">
+              <span><h3>🚦 The Traffic Scenario</h3><span class="tagline">Real-time · Running Late</span></span>
+              <span class="chev"><i data-lucide="chevron-down"></i></span>
+            </button>
+            <div class="scenario-body">
+              <div class="scenario-inner">
+                <div>
+                  <p class="muted">Trigger context: User is stuck in traffic. Calendar shows meeting in 15 min, ETA is 20–25 min away.</p>
+                  <div class="timeline">
+                    <div class="timeline-row"><span class="time">Now</span><span>📅 Calendar scanned — "Team Standup" in 15 min, 6 attendees</span></div>
+                    <div class="timeline-row"><span class="time">Now</span><span>🗺️ GPS shows 20–25 min ETA — conflict detected</span></div>
+                    <div class="timeline-row"><span class="time">Now</span><span>📂 Asks user: "Pull all meeting files to one place?" → [Yes, do it] [Skip]</span></div>
+                    <div class="timeline-row"><span class="time">If Yes</span><span>Drive + Gmail searched, all relevant files surfaced in one notification</span></div>
+                    <div class="timeline-row"><span class="time">Now</span><span>✉️ Draft prepared: "Hi team, running ~10 min late due to traffic — starting shortly!"</span></div>
+                    <div class="timeline-row"><span class="time">Now</span><span>User gets: [Send Draft] [Edit] [Dismiss] — one tap to send</span></div>
+                  </div>
+                  <span class="outcome">✅ Files ready. Email drafted. One tap to handle everything.</span>
+                </div>
+                <div class="reason-box"><h3>Control stays human</h3><p>ContextOS always asks before sending. You stay in control — it just does the heavy lifting.</p></div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="openclaw">
+      <div class="container">
+        <div class="section-head center reveal">
+          <span class="tag">The gateway between your life and your AI.</span>
+          <h2>OpenClaw — The Intelligence Gateway</h2>
+          <p class="sub">OpenClaw is the AI services layer that bridges your device context to the LLM. It's what makes ContextOS smart, not just automated.</p>
+        </div>
+        <div class="grid-2">
+          <article class="card reveal">
+            <h3>What OpenClaw does</h3>
+            <ul class="feature-list">
+              <li>Acts as the gateway between Google Cloud Services and the on-device LLM</li>
+              <li>Performs situation analysis every 15 minutes</li>
+              <li>Produces context label, urgency level, skill recommendations + reasoning chain</li>
+              <li>Drafts natural-language messages in &lt;3 seconds</li>
+              <li>Supports multi-turn chat augmented with live Calendar/Gmail/Drive data</li>
+              <li>Uses rule-based fallback for confidence &lt; 0.7</li>
+              <li>Hot-swaps AI providers by task: reasoning, drafting, chat, or fallback execution</li>
+            </ul>
+          </article>
+          <article class="stack-box reveal">Models:     gemini-2.0-flash (reasoning & chat)
+            gemini-2.0-flash-lite (drafting)
+Fallback:   Groq (gsk_ key prefix auto-detected)
+API style:  Anthropic-style REST via HttpURLConnection
+On-device:  Audio context classification (AudioRecord)
+Budget:     ≤2,000 prompt / ≤500 response per cycle
+Hot swap:   provider router picks fastest safe model per skill</article>
+        </div>
+        <div class="ui-showcase reveal" aria-label="ContextOS premium UI features">
+          <article class="ui-tile"><i data-lucide="scan-eye"></i><h3>See It Think</h3><p>Reasoning panels show the exact signals behind each recommendation.</p></article>
+          <article class="ui-tile"><i data-lucide="bell-ring"></i><h3>Smart Nudges</h3><p>Notifications appear only when ContextOS has a useful next step.</p></article>
+          <article class="ui-tile"><i data-lucide="shield-half"></i><h3>Privacy Console</h3><p>PII masking, encrypted storage, and clear-all-data stay one tap away.</p></article>
+          <article class="ui-tile"><i data-lucide="zap"></i><h3>Fast Actions</h3><p>Send draft, open files, start route, or ask why from the same card.</p></article>
+        </div>
+        <div class="privacy-box reveal" id="privacy"><strong>🔒 Privacy guarantee:</strong> All sensitive data — location, calendar events, contacts — stays on-device. PII masking before any data leaves: email → [EMAIL], location → [LOCATION], phone → [PHONE]. GDPR compliant. Full data deletion button. No third-party data sharing. Ever.</div>
+      </div>
+    </section>
+
+    <section id="flow">
+      <div class="container">
+        <div class="section-head reveal">
+          <h2>Setup once. ContextOS handles the rest.</h2>
+          <p class="sub">Everything runs on your device. No data leaves your phone. Encrypted storage. GDPR compliant. Clear-all-data button.</p>
+        </div>
+        <div class="flow">
+          <article class="step-card reveal"><h3>Login</h3><p class="muted">Sign in with Google account.</p></article>
+          <article class="step-card reveal"><h3>Grant Permissions</h3><p class="muted">Calendar, Location, Contacts, Notification access — all processed on-device.</p></article>
+          <article class="step-card reveal"><h3>Quick Setup (2 min)</h3><p class="muted">Set work hours, pin Home/Office on map, choose commute days.</p></article>
+          <article class="step-card reveal"><h3>It runs in the background</h3><p class="muted">Wakes every 15 min, builds your SituationModel, acts or asks.</p></article>
+        </div>
+        <div class="callout reveal" style="margin-top:18px;">ContextOS runs silently in the background as a persistent Android Foreground Service. It asks for your input only when it matters — like a great assistant who handles things without being asked, but always checks before sending.</div>
+        <div class="mode-row">
+          <div class="mode reveal"><div class="toggle-dot"></div><h3>Auto-approve mode</h3><p class="muted">Executes trusted, learned patterns automatically.</p></div>
+          <div class="mode reveal"><div class="toggle-dot"></div><h3>Learn mode (default)</h3><p class="muted">Asks for confirmation and learns preferences over time.</p></div>
+          <div class="mode reveal"><div class="toggle-dot"></div><h3>AI Review Layer</h3><p class="muted">An optional agent reviews OpenClaw's recommendations before execution.</p></div>
+        </div>
+        <div class="callout reveal" style="margin-top:18px;"><strong>Hot-swap control:</strong> ContextOS can switch between Gemini Flash, Gemini Flash Lite, Groq fallback, and deterministic rules without changing the user flow. The UI shows which engine made the recommendation, how confident it was, and which fallback would run if AI is unavailable.</div>
+      </div>
+    </section>
+
+    <section id="comparison">
+      <div class="container">
+        <div class="section-head center reveal"><h2>Why not just use Bixby?</h2></div>
+        <div class="comparison reveal">
+          <table>
+            <thead><tr><th>Feature</th><th>Bixby / GA / Siri</th><th>Bixby Routines</th><th>ContextOS</th></tr></thead>
+            <tbody>
+              <tr><td>Interaction model</td><td>Reactive (waits for command)</td><td>Reactive (manual rule)</td><td>✅ Proactive — acts autonomously</td></tr>
+              <tr><td>Context awareness</td><td>Limited / basic</td><td>Trigger-based only</td><td>✅ Deep: 15-min SituationModel</td></tr>
+              <tr><td>Learning</td><td>None</td><td>None</td><td>✅ Routine + Preference + Location memory</td></tr>
+              <tr><td>Message drafting</td><td>None</td><td>None</td><td>✅ LLM-powered, context-aware</td></tr>
+              <tr><td>Document orchestration</td><td>None</td><td>None</td><td>✅ Gmail + Drive pre-meeting search</td></tr>
+              <tr><td>Processing location</td><td>Cloud-dependent</td><td>On-device (limited)</td><td>✅ On-device first, cloud opt-in</td></tr>
+              <tr><td>Transparency</td><td>Opaque</td><td>Manual config visible</td><td>✅ Full action log + "Why?" reasoning</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="impact">
+      <div class="container">
+        <div class="section-head reveal"><h2>The numbers speak.</h2></div>
+        <div class="stats">
+          <div class="stat reveal"><strong><span class="counter" data-target="60" data-prefix="40–">0</span></strong><span>Micro-decisions eliminated daily per user</span></div>
+          <div class="stat reveal"><strong><span class="counter" data-target="45" data-prefix="30–">0</span> min</strong><span>Saved per user per day</span></div>
+          <div class="stat reveal"><strong><span class="counter" data-target="500" data-suffix="M+">0</span></strong><span>TAM: smartphone users with complex schedules</span></div>
+          <div class="stat reveal"><strong>&lt;<span class="counter" data-target="5" data-suffix="%">0</span></strong><span>Target battery overhead over 8hr day</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tech">
+      <div class="container">
+        <div class="section-head reveal"><h2>Built for production. Not a prototype.</h2></div>
+        <button class="tech-toggle reveal" aria-expanded="false"><span>Show Tech Details</span><i data-lucide="chevron-down"></i></button>
+        <div class="tech-panel">
+          <div class="tech-inner">
+            <div class="grid-2">
+              <article>
+                <h3>Tech Stack</h3>
+                <ul class="feature-list">
+                  <li>Language: Kotlin, Kotlin DSL Gradle</li>
+                  <li>UI: Jetpack Compose + Material Design 3</li>
+                  <li>DI: Hilt (Dagger)</li>
+                  <li>Database: Room (SQLite) + KSP</li>
+                  <li>Background: Foreground Service + WorkManager + AlarmManager</li>
+                  <li>Serialization: kotlinx.serialization</li>
+                  <li>Testing: JUnit, MockK, Robolectric, MockWebServer</li>
+                </ul>
+              </article>
+              <article>
+                <h3>Multi-Module Architecture</h3>
+                <ul class="feature-list">
+                  <li><code>:app</code> — Jetpack Compose UI, Navigation, ViewModels</li>
+                  <li><code>:core:service</code> — Foreground Service + OpenClaw Agent loop</li>
+                  <li><code>:core:skills</code> — Skill interface + 6 skill implementations</li>
+                  <li><code>:core:memory</code> — Routine, Preference, Location learning</li>
+                  <li><code>:core:network</code> — Calendar, Gmail, Drive, Maps API clients</li>
+                  <li><code>:core:data</code> — Room DB, DAOs, SituationModel domain classes</li>
+                </ul>
+              </article>
+            </div>
+            <article>
+              <h3>System Flow (15-min cycle)</h3>
+              <pre>1. SensorDataCollector → RawSensorData (≤3s)
+2. SituationModelBuilder.build() incl. calendar + memory (≤4s)
+3. OpenClawAgent.analyzeSituation() → SituationAnalysis (≤2s)
+4. skill.shouldTrigger() × 6 skills (≤1s)
+5. skill.execute() → SkillResult → ActionDispatcher (≤3s)
+6. ActionLog write to Room DB + Notification
+Total: 12s compute + 3s dispatch = &lt;15s per cycle</pre>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="roadmap">
+      <div class="container">
+        <div class="section-head center reveal"><h2>The vision is bigger.</h2></div>
+        <div class="roadmap">
+          <article class="phase reveal"><h3>Phase 1 (Now)</h3><p class="muted">6 core skills, Android app, OpenClaw AI layer, Gmail + Drive integration.</p></article>
+          <article class="phase reveal"><h3>Phase 2 (Next)</h3><ul class="feature-list"><li>Galaxy Watch integration</li><li>Galaxy Buds in-ear context detection</li><li>SmartThings home automation triggers</li></ul></article>
+          <article class="phase reveal"><h3>Phase 3 (Vision)</h3><ul class="feature-list"><li>Knox enterprise deployments</li><li>Cross-device orchestration</li><li>Cloud predictive actions</li><li>Bixby reimagined as Samsung's proactive orchestrator</li></ul></article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-grid">
+      <div>
+        <div class="brand"><span class="mark">🦾</span>ContextOS</div>
+        <p class="small-print"><em>"Your phone knows what you're doing."</em></p>
+        <p class="small-print">College_BOB_MARLEY — Samsung PRISM Hackathon</p>
+        <p class="small-print">All processing on-device. No data leaves your phone. GDPR compliant.</p>
+      </div>
+      <div>
+        <div class="footer-links">
+          <a href="https://github.com/MUKUL-PRASAD-SIGH/ContextOS" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="#" aria-label="Demo Video placeholder">Demo Video</a>
+          <a href="#" aria-label="Technical Docs placeholder">Technical Docs</a>
+          <a href="https://www.linkedin.com/in/MukulPrasad1" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        </div>
+        <div class="social-icons" aria-label="Social profile links">
+          <a class="social-icon" href="https://github.com/MUKUL-PRASAD-SIGH/ContextOS" target="_blank" rel="noopener noreferrer" aria-label="ContextOS GitHub repository"><i data-lucide="github"></i></a>
+          <a class="social-icon" href="https://www.linkedin.com/in/MukulPrasad1" target="_blank" rel="noopener noreferrer" aria-label="Mukul Prasad LinkedIn profile"><i data-lucide="linkedin"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.lucide) window.lucide.createIcons();
+
+      const notifications = [...document.querySelectorAll(".notification")];
+      let activeNote = 0;
+      setInterval(() => {
+        notifications[activeNote].classList.remove("active");
+        activeNote = (activeNote + 1) % notifications.length;
+        notifications[activeNote].classList.add("active");
+      }, 2500);
+
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+      document.querySelectorAll(".reveal").forEach(el => revealObserver.observe(el));
+
+      document.querySelectorAll(".scenario-button").forEach(button => {
+        button.addEventListener("click", () => {
+          const card = button.closest(".scenario");
+          const isOpen = card.classList.toggle("open");
+          button.setAttribute("aria-expanded", String(isOpen));
+        });
+      });
+
+      const techButton = document.querySelector(".tech-toggle");
+      const techPanel = document.querySelector(".tech-panel");
+      techButton.addEventListener("click", () => {
+        const isOpen = techPanel.classList.toggle("open");
+        techButton.setAttribute("aria-expanded", String(isOpen));
+        techButton.querySelector("span").textContent = isOpen ? "Hide Tech Details" : "Show Tech Details";
+      });
+
+      const counters = [...document.querySelectorAll(".counter")];
+      let counted = false;
+      const countObserver = new IntersectionObserver((entries) => {
+        if (counted || !entries.some(entry => entry.isIntersecting)) return;
+        counted = true;
+        counters.forEach(counter => {
+          const target = Number(counter.dataset.target);
+          const prefix = counter.dataset.prefix || "";
+          const suffix = counter.dataset.suffix || "";
+          const start = performance.now();
+          const duration = 1200;
+          const tick = (now) => {
+            const progress = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const value = Math.round(target * eased);
+            counter.textContent = prefix + value + suffix;
+            if (progress < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        });
+      }, { threshold: 0.35 });
+      const impact = document.querySelector("#impact");
+      if (impact) countObserver.observe(impact);
+    });
+  </script>
+</body>
 </html>
