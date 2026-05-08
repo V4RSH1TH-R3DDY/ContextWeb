@@ -1,0 +1,144 @@
+/* Documentation markdown styling */
+.docs-content h3,
+.docs-content h4,
+.docs-content h5 {
+    margin-top: 24px;
+    margin-bottom: 12px;
+    color: var(--text-primary);
+    font-family: var(--font-title);
+}
+
+.docs-content p {
+    margin-bottom: 12px;
+}
+
+.docs-content a {
+    color: var(--purple-glow);
+}
+
+.docs-content code {
+    font-family: var(--font-label);
+    background: rgba(124, 58, 237, 0.12);
+    padding: 0 6px;
+    border-radius: 6px;
+}
+
+.docs-content pre {
+    background: #0a0a12;
+    border: 1px solid #1e1e2e;
+    border-radius: 16px;
+    padding: 20px;
+    overflow: auto;
+    margin: 16px 0;
+}
+
+.docs-content pre code {
+    background: transparent;
+    padding: 0;
+}
+
+.docs-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+}
+
+.docs-content th,
+.docs-content td {
+    border: 1px solid rgba(124, 58, 237, 0.2);
+    padding: 8px 10px;
+    text-align: left;
+}
+
+.docs-content th {
+    color: var(--text-primary);
+    background: rgba(124, 58, 237, 0.12);
+}
+
+.docs-content blockquote {
+    border-left: 3px solid rgba(124, 58, 237, 0.6);
+    padding-left: 16px;
+    color: var(--text-secondary);
+}
+
+.docs-content ul,
+.docs-content ol {
+    margin: 12px 0 12px 20px;
+}
+
+/* Override Tailwind's max-w-7xl for larger desktop layouts
+	 Increase inner container width from 1440px to 1700px. */
+@media (min-width: 1024px) {
+    .max-w-7xl {
+        max-width: 1700px !important;
+    }
+}
+
+/* Vim-like code block styling and spacing */
+.code-wrapper {
+    margin: 28px 0;
+}
+
+.code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-radius: 12px 12px 0 0;
+    background: #07070b;
+    border: 1px solid rgba(124, 58, 237, 0.06);
+    color: var(--text-tertiary);
+    font-family: var(--font-label);
+    font-size: 12px;
+}
+
+.code-vim-bullets {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.code-vim-bullets .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.code-vim-bullets .dot.red {
+    background: #ff5f56;
+}
+
+.code-vim-bullets .dot.yellow {
+    background: #ffbd2e;
+}
+
+.code-vim-bullets .dot.green {
+    background: #27c93f;
+}
+
+.code-label {
+    opacity: 0.9;
+}
+
+.code-wrapper pre {
+    margin: 0;
+    border-radius: 0 0 12px 12px;
+    padding: 18px;
+    background: #0a0a12;
+    border: 1px solid #1e1e2e;
+    overflow: auto;
+}
+
+.inline-code {
+    background: rgba(124, 58, 237, 0.08);
+    padding: 2px 6px;
+    border-radius: 6px;
+}
+
+/* Ensure code blocks are visually separated from adjacent theory text */
+.docs-content p+.code-wrapper,
+.docs-content h2+.code-wrapper,
+.docs-content h3+.code-wrapper {
+    margin-top: 20px;
+}
