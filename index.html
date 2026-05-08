@@ -660,7 +660,7 @@
       border: 1px solid rgba(86,216,155,.32);
       font-weight: 800;
     }
-    .reason-box, .privacy-box, .callout, pre {
+    .reason-box, .callout, pre {
       border: 1px solid rgba(79,110,247,.28);
       background: rgba(79,110,247,.075);
       border-radius: var(--radius);
@@ -677,38 +677,6 @@
       font-family: "JetBrains Mono";
       color: #f5f1d3;
       white-space: pre-wrap;
-    }
-    .ui-showcase {
-      margin-top: 18px;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-    }
-    .ui-tile {
-      padding: 16px;
-      border: 1px solid rgba(42,42,58,.86);
-      border-radius: var(--radius);
-      background: linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.015));
-      min-height: 128px;
-      position: relative;
-      overflow: hidden;
-    }
-    .ui-tile::after {
-      content: "";
-      position: absolute;
-      inset: auto 14px 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--primary), transparent);
-      opacity: .75;
-    }
-    .ui-tile i { color: var(--primary); margin-bottom: 10px; }
-    .ui-tile h3 { font-size: 1rem; margin-bottom: 8px; }
-    .ui-tile p { margin: 0; color: #aaaad0; font-size: .9rem; }
-    .privacy-box {
-      margin-top: 20px;
-      border-color: rgba(86,216,155,.36);
-      background: linear-gradient(135deg, rgba(86,216,155,.1), rgba(79,110,247,.075));
-      font-size: 1.04rem;
     }
     .flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; counter-reset: flow; }
     .flow .step-card { padding: 18px; position: relative; min-height: 190px; }
@@ -794,7 +762,7 @@
       .nav-links { display: none; }
       .hero-grid, .grid-2, .scenario-inner { grid-template-columns: 1fr; }
       .phone-stage { min-height: 520px; }
-      .grid-3, .pipeline, .flow, .stats, .roadmap, .mode-row, .command-strip, .ui-showcase, .capability-grid { grid-template-columns: 1fr; }
+      .grid-3, .pipeline, .flow, .stats, .roadmap, .mode-row, .command-strip, .capability-grid { grid-template-columns: 1fr; }
       .pipeline::before, .pipeline::after { display: none; }
       section { padding: 72px 0; }
       .footer-grid { grid-template-columns: 1fr; }
@@ -825,8 +793,6 @@
       <div class="nav-links">
         <a href="#how-it-works">How it works</a>
         <a href="#scenarios">Scenarios</a>
-        <a href="#openclaw">OpenClaw</a>
-        <a href="#privacy">Privacy</a>
         <a href="#tech">Tech</a>
       </div>
     </div>
@@ -842,7 +808,7 @@
           <div class="hero-actions">
             <a class="btn btn-primary" href="#demo"><i data-lucide="play"></i>Watch Demo</a>
             <a class="btn btn-quiet" href="#how-it-works"><i data-lucide="workflow"></i>See How It Works</a>
-            <a class="btn btn-quiet" href="#scenarios"><i data-lucide="sparkles"></i>See It Think</a>
+            <a class="btn btn-quiet" href="#scenarios"><i data-lucide="sparkles"></i>Explore Scenarios</a>
           </div>
           <div class="hero-meta" aria-label="Product guarantees">
             <span class="meta-pill"><i data-lucide="shield-check"></i>Privacy-first by design</span>
@@ -1076,44 +1042,6 @@ Q3 deck referenced in meeting title → fetching from Drive.</pre>
             </div>
           </article>
         </div>
-      </div>
-    </section>
-
-    <section id="openclaw">
-      <div class="container">
-        <div class="section-head center reveal">
-          <span class="tag">The gateway between your life and your AI.</span>
-          <h2>OpenClaw — The Intelligence Gateway</h2>
-          <p class="sub">OpenClaw is the AI services layer that bridges your device context to the LLM. It's what makes ContextOS smart, not just automated.</p>
-        </div>
-        <div class="grid-2">
-          <article class="card reveal">
-            <h3>What OpenClaw does</h3>
-            <ul class="feature-list">
-              <li>Acts as the gateway between Google Cloud Services and the on-device LLM</li>
-              <li>Performs situation analysis every 15 minutes</li>
-              <li>Produces context label, urgency level, skill recommendations + reasoning chain</li>
-              <li>Drafts natural-language messages in &lt;3 seconds</li>
-              <li>Supports multi-turn chat augmented with live Calendar/Gmail/Drive data</li>
-              <li>Uses rule-based fallback for confidence &lt; 0.7</li>
-              <li>Hot-swaps AI providers by task: reasoning, drafting, chat, or fallback execution</li>
-            </ul>
-          </article>
-          <article class="stack-box reveal">Models:     gemini-2.0-flash (reasoning & chat)
-            gemini-2.0-flash-lite (drafting)
-Fallback:   Groq (gsk_ key prefix auto-detected)
-API style:  Anthropic-style REST via HttpURLConnection
-On-device:  Audio context classification (AudioRecord)
-Budget:     ≤2,000 prompt / ≤500 response per cycle
-Hot swap:   provider router picks fastest safe model per skill</article>
-        </div>
-        <div class="ui-showcase reveal" aria-label="ContextOS premium UI features">
-          <article class="ui-tile"><i data-lucide="scan-eye"></i><h3>See It Think</h3><p>Reasoning panels show the exact signals behind each recommendation.</p></article>
-          <article class="ui-tile"><i data-lucide="bell-ring"></i><h3>Smart Nudges</h3><p>Notifications appear only when ContextOS has a useful next step.</p></article>
-          <article class="ui-tile"><i data-lucide="shield-half"></i><h3>Privacy Console</h3><p>PII masking, encrypted storage, and clear-all-data stay one tap away.</p></article>
-          <article class="ui-tile"><i data-lucide="zap"></i><h3>Fast Actions</h3><p>Send draft, open files, start route, or ask why from the same card.</p></article>
-        </div>
-        <div class="privacy-box reveal" id="privacy"><strong>🔒 Privacy guarantee:</strong> All sensitive data — location, calendar events, contacts — stays on-device. PII masking before any data leaves: email → [EMAIL], location → [LOCATION], phone → [PHONE]. GDPR compliant. Full data deletion button. No third-party data sharing. Ever.</div>
       </div>
     </section>
 
