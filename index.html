@@ -737,9 +737,160 @@
     .detail-panel { max-height: 0; overflow: hidden; margin-top: 14px; transition: max-height .45s ease; }
     .detail-panel.open { max-height: 1400px; }
     .detail-inner { padding: 22px; display: grid; gap: 18px; }
-    .roadmap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-    .phase { position: relative; padding: 24px; border: 1px solid rgba(42,42,58,.85); background: rgba(17,17,24,.82); border-radius: var(--radius); }
-    .phase::before { content: ""; position: absolute; top: -1px; left: 20px; right: 20px; height: 2px; background: linear-gradient(90deg, var(--accent), var(--primary), var(--gold)); }
+    .roadmap-wrap {
+      position: relative;
+      padding: 18px;
+      border: 1px solid rgba(42,42,58,.78);
+      border-radius: var(--radius);
+      background:
+        radial-gradient(circle at 14% 20%, rgba(232,64,64,.15), transparent 18rem),
+        radial-gradient(circle at 82% 0%, rgba(79,110,247,.2), transparent 20rem),
+        rgba(17,17,24,.58);
+      overflow: hidden;
+    }
+
+    .roadmap-wrap::before {
+      content: "";
+      position: absolute;
+      left: 7%;
+      right: 7%;
+      top: 82px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--primary), var(--gold));
+      box-shadow: 0 0 28px rgba(79,110,247,.42);
+      opacity: .82;
+    }
+
+    .roadmap {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .phase {
+      position: relative;
+      min-height: 330px;
+      padding: 22px;
+      border: 1px solid rgba(42,42,58,.85);
+      background:
+        linear-gradient(180deg, rgba(22,22,31,.94), rgba(10,10,15,.88)),
+        rgba(17,17,24,.82);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 20px 70px rgba(0,0,0,.28);
+    }
+
+    .phase::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+      background-size: 30px 30px;
+      opacity: .18;
+      pointer-events: none;
+    }
+
+    .phase::after {
+      content: "";
+      position: absolute;
+      left: 22px;
+      right: 22px;
+      bottom: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+      box-shadow: 0 0 24px rgba(79,110,247,.42);
+    }
+
+    .phase-top {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .phase-orb {
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: white;
+      background: rgba(79,110,247,.14);
+      border: 1px solid rgba(79,110,247,.44);
+      box-shadow: 0 0 30px rgba(79,110,247,.28);
+    }
+
+    .phase-badge {
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(245,200,66,.34);
+      background: rgba(245,200,66,.08);
+      color: #fff2b8;
+      font: 800 .72rem "JetBrains Mono";
+      text-transform: uppercase;
+    }
+
+    .phase h3 {
+      position: relative;
+      z-index: 1;
+      font-size: 1.45rem;
+      margin-bottom: 8px;
+    }
+
+    .phase p, .phase ul {
+      position: relative;
+      z-index: 1;
+    }
+
+    .phase-list {
+      list-style: none;
+      padding: 0;
+      margin: 18px 0 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .phase-list li {
+      display: grid;
+      grid-template-columns: 24px 1fr;
+      gap: 10px;
+      align-items: start;
+      padding: 10px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(42,42,58,.72);
+      background: rgba(255,255,255,.03);
+      color: #c9c9e0;
+    }
+
+    .phase-list i {
+      color: var(--primary);
+      margin-top: 1px;
+    }
+
+    .phase-meter {
+      position: relative;
+      z-index: 1;
+      height: 8px;
+      margin-top: 20px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      overflow: hidden;
+    }
+
+    .phase-meter span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), var(--primary), var(--gold));
+      box-shadow: 0 0 18px rgba(79,110,247,.45);
+    }
 
     footer {
       padding: 44px 0;
@@ -776,6 +927,7 @@
       .phone-stage { min-height: 520px; }
       .grid-3, .pipeline, .flow, .roadmap, .mode-row, .command-strip, .capability-grid { grid-template-columns: 1fr; }
       .pipeline::before, .pipeline::after { display: none; }
+      .roadmap-wrap::before { display: none; }
       section { padding: 72px 0; }
       .footer-grid { grid-template-columns: 1fr; }
       .footer-links, .social-icons { justify-content: flex-start; }
@@ -1163,11 +1315,57 @@ Total: 12s compute + 3s dispatch = &lt;15s per cycle</pre>
 
     <section id="roadmap">
       <div class="container">
-        <div class="section-head center reveal"><h2>The vision is bigger.</h2></div>
-        <div class="roadmap">
-          <article class="phase reveal"><h3>Phase 1 (Now)</h3><p class="muted">6 core skills, Android app, OpenClaw AI layer, Gmail + Drive integration.</p></article>
-          <article class="phase reveal"><h3>Phase 2 (Next)</h3><ul class="feature-list"><li>Galaxy Watch integration</li><li>Galaxy Buds in-ear context detection</li><li>SmartThings home automation triggers</li></ul></article>
-          <article class="phase reveal"><h3>Phase 3 (Vision)</h3><ul class="feature-list"><li>Knox enterprise deployments</li><li>Cross-device orchestration</li><li>Cloud predictive actions</li><li>Bixby reimagined as Samsung's proactive orchestrator</li></ul></article>
+        <div class="section-head center reveal">
+          <span class="tag">From phone assistant to device operating layer</span>
+          <h2>The vision is bigger.</h2>
+        </div>
+        <div class="roadmap-wrap reveal">
+          <div class="roadmap">
+            <article class="phase">
+              <div class="phase-top">
+                <div class="phase-orb"><i data-lucide="rocket"></i></div>
+                <span class="phase-badge">Now</span>
+              </div>
+              <h3>Phase 1</h3>
+              <p class="muted">The core ContextOS launch layer.</p>
+              <ul class="phase-list">
+                <li><i data-lucide="hand"></i><span>6 core skills</span></li>
+                <li><i data-lucide="smartphone"></i><span>Android app</span></li>
+                <li><i data-lucide="brain-circuit"></i><span>OpenClaw AI layer</span></li>
+                <li><i data-lucide="folder-sync"></i><span>Gmail + Drive integration</span></li>
+              </ul>
+              <div class="phase-meter" aria-label="Phase 1 progress"><span style="width: 86%;"></span></div>
+            </article>
+            <article class="phase">
+              <div class="phase-top">
+                <div class="phase-orb"><i data-lucide="watch"></i></div>
+                <span class="phase-badge">Next</span>
+              </div>
+              <h3>Phase 2</h3>
+              <p class="muted">Context that moves beyond the phone.</p>
+              <ul class="phase-list">
+                <li><i data-lucide="heart-pulse"></i><span>Galaxy Watch integration</span></li>
+                <li><i data-lucide="headphones"></i><span>Galaxy Buds in-ear context detection</span></li>
+                <li><i data-lucide="home"></i><span>SmartThings home automation triggers</span></li>
+              </ul>
+              <div class="phase-meter" aria-label="Phase 2 progress"><span style="width: 54%;"></span></div>
+            </article>
+            <article class="phase">
+              <div class="phase-top">
+                <div class="phase-orb"><i data-lucide="orbit"></i></div>
+                <span class="phase-badge">Vision</span>
+              </div>
+              <h3>Phase 3</h3>
+              <p class="muted">A proactive orchestration layer for the Samsung ecosystem.</p>
+              <ul class="phase-list">
+                <li><i data-lucide="building-2"></i><span>Knox enterprise deployments</span></li>
+                <li><i data-lucide="network"></i><span>Cross-device orchestration</span></li>
+                <li><i data-lucide="cloud-lightning"></i><span>Cloud predictive actions</span></li>
+                <li><i data-lucide="sparkles"></i><span>Bixby reimagined as Samsung's proactive orchestrator</span></li>
+              </ul>
+              <div class="phase-meter" aria-label="Phase 3 progress"><span style="width: 28%;"></span></div>
+            </article>
+          </div>
         </div>
       </div>
     </section>
